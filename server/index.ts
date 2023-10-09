@@ -4,12 +4,17 @@ import { IUserCreateRequest, IUserQueryRequest, IUserUpdateRequest } from "./src
 import bodyParser from "body-parser";
 import { sequelize } from "./src/config/db.config";
 import {IResponse} from "./src/interface/IResponse";
+import cors from "cors";
 
 const app = express();
 const port = process.env.port || 8080; // default port to listen
 
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(cors({
+    origin: process.env.ALLOW_ORIGIN || "*"
+}));
+
 // define a route handler for the default home page
 app.get( "/", ( req: any, res: { send: (arg0: string) => void; } ) => {
     res.send( "Server ready!" );
