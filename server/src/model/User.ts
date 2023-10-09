@@ -3,7 +3,8 @@ import { sequelize } from "../config/db.config";
 
 export const User = sequelize.define("user", {
     username: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        primaryKey: true
     },
     first_name: {
         type: DataTypes.STRING,

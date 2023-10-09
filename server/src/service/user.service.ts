@@ -7,7 +7,7 @@ export async function getUser(username: string) {
 }
 
 export async function createUser(user: IUser) {
-    await User.create({
+    return await User.create({
         username: user.last_name,
         first_name: user.first_name,
         last_name: user.last_name
@@ -17,9 +17,11 @@ export async function createUser(user: IUser) {
 export async function deleteUser(username: string) {
     const user = await getUser(username);
     if (!user) {
-        return null;
+        console.log(`User ${username} doesn't exists!`);
+        return false;
     }
     await user.destroy();
+    return true;
 }
 
 export async function updateUser(username: string, newUserData: IUserBasic) {
@@ -27,5 +29,5 @@ export async function updateUser(username: string, newUserData: IUserBasic) {
     if (!user) {
         return null;
     }
-    await user.update(newUserData);
+    return await user.update(newUserData);
 }

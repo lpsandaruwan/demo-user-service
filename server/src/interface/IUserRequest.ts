@@ -5,14 +5,14 @@ export interface IUserCreateRequest {
 }
 
 export interface IUserUpdateRequest {
-    query: {
-        id: string
+    params: {
+        username: string
     }
     body: IUserBasic
 }
 
 export interface IUserQueryRequest {
-    query: {
-        id: string
+    params: {
+        username: string
     }
 }

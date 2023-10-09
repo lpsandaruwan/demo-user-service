@@ -1,33 +1,41 @@
 import express from "express";
-import {IUser, IUserBasic} from "./src/interface/IUser";
-import {createUser, deleteUser, getUser, updateUser} from "./src/service/user.service";
-import {IUserCreateRequest, IUserQueryRequest, IUserUpdateRequest} from "./src/interface/IUserRequest";
+import { createUser, deleteUser, getUser, updateUser } from "./src/service/user.service";
+import { IUserCreateRequest, IUserQueryRequest, IUserUpdateRequest } from "./src/interface/IUserRequest";
+import bodyParser from "body-parser";
+import { sequelize } from "./src/config/db.config";
 
 const app = express();
 const port = process.env.port || 8080; // default port to listen
 
+
+app.use(bodyParser.json())
 // define a route handler for the default home page
 app.get( "/", ( req: any, res: { send: (arg0: string) => void; } ) => {
-    res.send( "Hello world!" );
+    res.send( "Server ready!" );
 } );
 
-app.get("/users", async (req: IUserQueryRequest, res) => {
-    return await getUser(req.query.id);
+app.get("/users/:username", async (req: IUserQueryRequest, res) => {
+    const result = await getUser(req.params.username);
+    res.send(result);
 })
 
 app.post("/users", async (req: IUserCreateRequest, res) => {
-    return await createUser(req.body);
+    const result = await createUser(req.body);
+    res.send(result);
 })
 
-app.put("/users", async (req: IUserUpdateRequest, res) => {
-    return await updateUser(req.query.id, req.body);
+app.put("/users:username", async (req: IUserUpdateRequest, res) => {
+    const result = await updateUser(req.params.username, req.body);
+    res.send(result);
 })
 
-app.delete("/users", async (req: IUserQueryRequest, res) => {
-    return await deleteUser(req.query.id);
+app.delete("/users:username", async (req: IUserQueryRequest, res) => {
+    const result = await deleteUser(req.params.username);
+    res.send(result);
 })
 
 // start the Express server
-app.listen( port, () => {
+app.listen( port, async () => {
+    await sequelize.sync();
     console.log( `server started at http://localhost:${ port }` );
 } );
