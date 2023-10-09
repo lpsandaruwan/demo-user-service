@@ -31,7 +31,6 @@ export default function UserTable() {
     const classes = useStyles();
 
     const [actionType, setActionType] = useState(ActionType.Create);
-    const [selectedUsername, setSelectedUsername] = useState("");
     const [users, setUsers] = useState([] as IUser[]);
     const [open, setOpen] = useState(false);
 
@@ -75,64 +74,63 @@ export default function UserTable() {
     return (
         <React.Fragment>
             <Stack direction="column" spacing={4}>
-                <TableContainer>
-                    <Table className={classes.table}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="right">
-                                    <Typography variant="h6">
-                                        Username
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="h6">
-                                        First name
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Typography variant="h6">
-                                        Last name
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="right"></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users.map(user => {
-                                return <TableRow>
-                                    <TableCell align="right">{user.username}</TableCell>
-                                    <TableCell align="right">{user.first_name}</TableCell>
-                                    <TableCell align="right">{user.last_name}</TableCell>
+                {users.length === 0? "":
+                    <TableContainer>
+                        <Table className={classes.table}>
+                            <TableHead>
+                                <TableRow>
                                     <TableCell align="right">
-                                        <ButtonGroup variant="text">
-                                            <Button
-                                                onClick={() => {
-                                                    setSelectedUsername(user.username);
-                                                    setActionType(ActionType.Edit);
-                                                    setTimeout(() => {
-                                                        handleUserModalOpen();
-                                                    }, 500);
-                                                }}>
-                                                Edit
-                                            </Button>
-                                            <Button
-                                                onClick={() => {
-                                                    setSelectedUsername(user.username);
-                                                    setTimeout(async () => {
-                                                        await handleUserDeletion(user.username);
-                                                    }, 500);
-                                                }}>
-                                                Delete
-                                            </Button>
-                                        </ButtonGroup>
+                                        <Typography variant="h6">
+                                            Username
+                                        </Typography>
                                     </TableCell>
+                                    <TableCell align="right">
+                                        <Typography variant="h6">
+                                            First name
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Typography variant="h6">
+                                            Last name
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell align="right"></TableCell>
                                 </TableRow>
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+                            <TableBody>
+                                {users.map(user => {
+                                    return <TableRow>
+                                        <TableCell align="right">{user.username}</TableCell>
+                                        <TableCell align="right">{user.first_name}</TableCell>
+                                        <TableCell align="right">{user.last_name}</TableCell>
+                                        <TableCell align="right">
+                                            <ButtonGroup variant="text">
+                                                <Button
+                                                    onClick={() => {
+                                                        setActionType(ActionType.Edit);
+                                                        setTimeout(() => {
+                                                            handleUserModalOpen();
+                                                        }, 500);
+                                                    }}>
+                                                    Edit
+                                                </Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        setTimeout(async () => {
+                                                            await handleUserDeletion(user.username);
+                                                        }, 500);
+                                                    }}>
+                                                    Delete
+                                                </Button>
+                                            </ButtonGroup>
+                                        </TableCell>
+                                    </TableRow>
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                }
                 <Button variant="outlined" size="large" onClick={() => {
-                    setSelectedUsername("");
                     setActionType(ActionType.Create);
                     handleUserModalOpen();
                 }}>
@@ -148,8 +146,7 @@ export default function UserTable() {
                 <UserModalContent
                     actionType={actionType}
                     handleConfirm={handleUserModalConfirmation}
-                    handleClose={handleUserModalClose}
-                    selectedUsername={selectedUsername}></UserModalContent>
+                    handleClose={handleUserModalClose}></UserModalContent>
             </Modal>
         </React.Fragment>
     )

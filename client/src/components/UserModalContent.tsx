@@ -17,15 +17,14 @@ const style = {
 
 export interface IUserProps {
     actionType: ActionType,
-    selectedUsername: string,
     handleConfirm: (actionType: ActionType, user: IUser) => void,
     handleClose: () => void
 }
 
 export default function UserModalContent(props: IUserProps) {
-    const {actionType, handleConfirm, handleClose, selectedUsername} = props;
+    const {actionType, handleConfirm, handleClose} = props;
 
-    const [username, setUsername] = useState(selectedUsername);
+    const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
