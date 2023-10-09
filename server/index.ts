@@ -1,9 +1,8 @@
 import express from "express";
 import {createUser, deleteUser, getAllUsers, getUser, updateUser} from "./src/service/user.service";
-import { IUserCreateRequest, IUserQueryRequest, IUserUpdateRequest } from "./src/interface/IUserRequest";
+import {IUserCreateRequest, IUserQueryRequest, IUserUpdateRequest} from "./src/interface/IUserRequest";
 import bodyParser from "body-parser";
-import { sequelize } from "./src/config/db.config";
-import {IResponse} from "./src/interface/IResponse";
+import {sequelize} from "./src/config/db.config";
 import cors from "cors";
 
 const app = express();
@@ -16,8 +15,8 @@ app.use(cors({
 }));
 
 // define a route handler for the default home page
-app.get( "/", ( req: any, res: { send: (arg0: string) => void; } ) => {
-    res.send( "Server ready!" );
+app.get("/", (req: any, res: { send: (arg0: string) => void; }) => {
+    res.send("Server ready!");
 });
 
 app.get("/users", async (req, res) => {
@@ -46,7 +45,7 @@ app.delete("/users/:username", async (req: IUserQueryRequest, res) => {
 })
 
 // start the Express server
-app.listen( port, async () => {
+app.listen(port, async () => {
     await sequelize.sync();
-    console.log( `server started at http://localhost:${ port }` );
-} );
+    console.log(`server started at http://localhost:${port}`);
+});

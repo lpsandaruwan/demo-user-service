@@ -1,6 +1,12 @@
 # User service demo
 
-Demo REST API project for sitemate challenge.
+Demo project for sitemate challenge.
+
+### Prerequisites
+
+* Node.js
+* npm
+* yarn
 
 
 ### Running the server
@@ -12,13 +18,12 @@ yarn start
 
 ### APIs
 
-* User create `${HOST}:${PORT}/users`
+* Please refer to the attached postman collection, https://github.com/lpsandaruwan/demo-user-service/blob/main/sitemate-demo.postman_collection.json
 
-``` // request body
-{
-    "username": "",
-    "first_name": "",
-    "last_name": ""
-}
 
+### Running thee client
+
+```
+yarn install
+yarn start
 ```

@@ -5,7 +5,7 @@ import {ResponseCode} from "../interface/ResponseCode";
 
 
 async function findUserByUsername(username: string) {
-    return await User.findOne({ where: { username: username }});
+    return await User.findOne({where: {username: username}});
 }
 
 export async function getAllUsers(): Promise<IResponse> {
