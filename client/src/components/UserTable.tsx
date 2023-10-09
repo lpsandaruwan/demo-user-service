@@ -1,9 +1,21 @@
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import {useEffect, useState} from "react";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import { makeStyles } from '@mui/styles';
+import { useEffect, useState } from "react";
 import { IUser } from "../interfaces/IUser";
-import {fetchUsers} from "../client/user.service";
+import { fetchUsers } from "../client/user.service";
+
+const useStyles = makeStyles({
+    table: {
+        minWidth: 650,
+        "& .MuiTableCell-root": {
+            border: '1px solid black'
+        }
+    }
+});
 
 export default function UserTable() {
+    const classes = useStyles();
+
     const [users, setUsers] = useState([] as IUser[])
 
     const getUsers = async () => {
@@ -19,12 +31,24 @@ export default function UserTable() {
 
     return(
         <TableContainer>
-            <Table>
+            <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="right">Username</TableCell>
-                        <TableCell align="right">First name</TableCell>
-                        <TableCell align="right">Lastname</TableCell>
+                        <TableCell align="right">
+                            <Typography variant="h6">
+                                Username
+                            </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="h6">
+                                First name
+                            </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                            <Typography variant="h6">
+                                Last name
+                            </Typography>
+                        </TableCell>
                         <TableCell align="right"></TableCell>
                     </TableRow>
                 </TableHead>

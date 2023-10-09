@@ -1,15 +1,20 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Typography} from "@mui/material";
+import {Container, CssBaseline, Stack, Typography} from "@mui/material";
 import UserTable from "./components/UserTable";
 
 function App() {
   return (
-    <div className="User service demo">
-        <Typography variant="h2" gutterBottom>User management - demo</Typography>
-        <UserTable></UserTable>
-    </div>
+      <React.Fragment>
+          <CssBaseline />
+          <Container>
+              <Stack direction="column" spacing={2}>
+                  <Typography variant="h3">User management - demo</Typography>
+                  <UserTable></UserTable>
+              </Stack>
+          </Container>
+      </React.Fragment>
   );
 }
 
