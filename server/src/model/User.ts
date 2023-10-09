@@ -1,8 +1,14 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import { Model, DataTypes} from 'sequelize';
+import { sequelize } from "../config/db.config";
 
-export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-    declare id: CreationOptional<number>;
-    declare username: string;
-    declare first_name: string;
-    declare last_name: string;
-}
+export const User = sequelize.define("user", {
+    username: {
+        type: DataTypes.STRING
+    },
+    first_name: {
+        type: DataTypes.STRING,
+    },
+    last_name: {
+        type: DataTypes.STRING
+    }
+});
