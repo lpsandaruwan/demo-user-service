@@ -1,5 +1,7 @@
 import {
-    Button, Modal,
+    Button,
+    ButtonGroup,
+    Modal,
     Stack,
     Table,
     TableBody,
@@ -9,12 +11,12 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import { makeStyles } from '@mui/styles';
-import { useEffect, useState } from "react";
-import { IUser } from "../interfaces/IUser";
-import {addUser, fetchUsers} from "../client/user.service";
-import React from "react";
+import {makeStyles} from '@mui/styles';
+import React, {useEffect, useState} from "react";
+import {IUser} from "../interfaces/IUser";
+import {addUser, deleteUser, editUser, fetchUsers} from "../client/user.service";
 import UserModalContent from "./UserModalContent";
+import {ActionType} from "../interfaces/Actions";
 
 const useStyles = makeStyles({
     table: {
@@ -28,18 +30,36 @@ const useStyles = makeStyles({
 export default function UserTable() {
     const classes = useStyles();
 
+    const [actionType, setActionType] = useState(ActionType.Create);
+    const [selectedUsername, setSelectedUsername] = useState("");
     const [users, setUsers] = useState([] as IUser[]);
     const [open, setOpen] = useState(false);
 
-    const handleUserModalOpen = () => setOpen(true);
+    const handleUserModalOpen = () => {
+        setOpen(true);
+    }
 
     const handleUserModalClose = () => setOpen(false);
 
-    const handleUserModalConfirmation = async (user: IUser) => {
-        await addUser(user);
+    const handleUserModalConfirmation = async (actionType: ActionType, user: IUser) => {
+        if (actionType === ActionType.Create) {
+            await addUser(user);
+        } else if (actionType === ActionType.Edit) {
+            await editUser(
+                user.username,
+                {
+                    first_name: user.first_name,
+                    last_name: user.last_name
+                })
+        }
         await getUsers();
         handleUserModalClose();
     };
+
+    const handleUserDeletion = async (username: string) => {
+        await deleteUser(username);
+        await getUsers();
+    }
 
     const getUsers = async () => {
         const result = await fetchUsers();
@@ -52,7 +72,7 @@ export default function UserTable() {
         getUsers();
     }, [])
 
-    return(
+    return (
         <React.Fragment>
             <Stack direction="column" spacing={4}>
                 <TableContainer>
@@ -83,13 +103,41 @@ export default function UserTable() {
                                     <TableCell align="right">{user.username}</TableCell>
                                     <TableCell align="right">{user.first_name}</TableCell>
                                     <TableCell align="right">{user.last_name}</TableCell>
-                                    <TableCell align="right"></TableCell>
+                                    <TableCell align="right">
+                                        <ButtonGroup variant="text">
+                                            <Button
+                                                onClick={() => {
+                                                    setSelectedUsername(user.username);
+                                                    setActionType(ActionType.Edit);
+                                                    setTimeout(() => {
+                                                        handleUserModalOpen();
+                                                    }, 500);
+                                                }}>
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                onClick={() => {
+                                                    setSelectedUsername(user.username);
+                                                    setTimeout(async () => {
+                                                        await handleUserDeletion(user.username);
+                                                    }, 500);
+                                                }}>
+                                                Delete
+                                            </Button>
+                                        </ButtonGroup>
+                                    </TableCell>
                                 </TableRow>
                             })}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Button variant="outlined" size="large" onClick={handleUserModalOpen}>Add user</Button>
+                <Button variant="outlined" size="large" onClick={() => {
+                    setSelectedUsername("");
+                    setActionType(ActionType.Create);
+                    handleUserModalOpen();
+                }}>
+                    Add user
+                </Button>
             </Stack>
             <Modal
                 open={open}
@@ -97,7 +145,11 @@ export default function UserTable() {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <UserModalContent handleConfirm={handleUserModalConfirmation} handleClose={handleUserModalClose}></UserModalContent>
+                <UserModalContent
+                    actionType={actionType}
+                    handleConfirm={handleUserModalConfirmation}
+                    handleClose={handleUserModalClose}
+                    selectedUsername={selectedUsername}></UserModalContent>
             </Modal>
         </React.Fragment>
     )

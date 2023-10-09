@@ -1,4 +1,4 @@
-import { ResponseCode } from "./ResponseCode";
+import {ResponseCode} from "./ResponseCode";
 
 export interface IResponse {
     code: ResponseCode;

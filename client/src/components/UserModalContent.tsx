@@ -1,7 +1,7 @@
-import { IUser } from "../interfaces/IUser";
+import {IUser} from "../interfaces/IUser";
 import {Box, Button, Stack, TextField, Typography} from "@mui/material";
-import {Buffer} from "buffer";
-import {useState} from "react";
+import React, {useState} from "react";
+import {ActionType} from "../interfaces/Actions";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -16,19 +16,22 @@ const style = {
 };
 
 export interface IUserProps {
-    handleConfirm: (user: IUser) => void,
+    actionType: ActionType,
+    selectedUsername: string,
+    handleConfirm: (actionType: ActionType, user: IUser) => void,
     handleClose: () => void
 }
 
 export default function UserModalContent(props: IUserProps) {
-    const { handleConfirm, handleClose } = props;
+    const {actionType, handleConfirm, handleClose, selectedUsername} = props;
 
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState(selectedUsername);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
 
     const handleConfirmAction = () => {
         handleConfirm(
+            actionType,
             {
                 username: username,
                 first_name: firstName,
@@ -44,6 +47,7 @@ export default function UserModalContent(props: IUserProps) {
     return (
         <Box sx={style}>
             <Stack direction="column" spacing={3}>
+                <Typography variant="h5">{actionType}</Typography>
                 <TextField id="username"
                            label="Username"
                            variant="standard"
