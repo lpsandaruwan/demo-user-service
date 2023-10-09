@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, deleteUser, getUser, updateUser } from "./src/service/user.service";
+import {createUser, deleteUser, getAllUsers, getUser, updateUser} from "./src/service/user.service";
 import { IUserCreateRequest, IUserQueryRequest, IUserUpdateRequest } from "./src/interface/IUserRequest";
 import bodyParser from "body-parser";
 import { sequelize } from "./src/config/db.config";
@@ -13,7 +13,12 @@ app.use(bodyParser.json())
 // define a route handler for the default home page
 app.get( "/", ( req: any, res: { send: (arg0: string) => void; } ) => {
     res.send( "Server ready!" );
-} );
+});
+
+app.get("/users", async (req, res) => {
+    const result = await getAllUsers();
+    res.send(result);
+})
 
 app.get("/users/:username", async (req: IUserQueryRequest, res) => {
     const result = await getUser(req.params.username);

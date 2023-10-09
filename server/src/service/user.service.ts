@@ -8,6 +8,21 @@ async function findUserByUsername(username: string) {
     return await User.findOne({ where: { username: username }});
 }
 
+export async function getAllUsers(): Promise<IResponse> {
+    try {
+        const users = await User.findAll();
+        return {
+            code: ResponseCode.SUCCESSFUL,
+            result: users
+        }
+    } catch (e) {
+        return {
+            code: ResponseCode.ERROR,
+            result: `Error occurred while fetching users`
+        }
+    }
+}
+
 export async function getUser(username: string): Promise<IResponse> {
     try {
         const user = await findUserByUsername(username);
